@@ -37,6 +37,13 @@ export default function Header() {
           >
             Todolist
           </Link>
+          <Link
+            to="/form"
+            className="nav-link"
+            activeProps={{ className: 'nav-link is-active' }}
+          >
+            Form
+          </Link>
           <a
             href="https://tanstack.com/start/latest/docs/framework/react/overview"
             className="nav-link"
