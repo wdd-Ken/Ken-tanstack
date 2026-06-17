@@ -96,76 +96,103 @@ function RouteComponent() {
               'gap-2.5'
             )}
           >
-            <div>Name:</div>
-            <input
-              name="name"
-              defaultValue=''
-              required
-              className={cn(
-                'p-1',
-                'border',
-                'rounded-xs',
-                'text-sm',
-                'min-h-8.5'
-              )}
-            />
-            <div>Email:</div>
-            <input
-              name="email"
-              defaultValue=''
-              required
-              className={cn(
-                'p-1',
-                'border',
-                'rounded-xs',
-                'text-sm',
-                'min-h-8.5'
-              )}
-            />
-            <div>Phone:</div>
-            <input
-              name="phone"
-              defaultValue=''
-              required
-              className={cn(
-                'p-1',
-                'border',
-                'rounded-xs',
-                'text-sm',
-                'min-h-8.5'
-              )}
-            />
-            <label>
-              <input 
-                type="checkbox" 
-                name='checkbox'
-                value="checkbox1"
-                defaultChecked={true}
+            <div>
+              <div>Name:</div>
+              <input
+                name="name"
+                defaultValue=''
                 required
+                className={cn(
+                  'p-1',
+                  'border',
+                  'rounded-xs',
+                  'text-sm',
+                  'min-h-8.5'
+                )}
               />
-              checkbox1
-            </label>
-            <label>
-              <input 
-                type="checkbox" 
-                name='checkbox2'
-                value="checkbox2"
-                defaultChecked={false}
+              <div>Email:</div>
+              <input
+                name="email"
+                defaultValue=''
                 required
+                className={cn(
+                  'p-1',
+                  'border',
+                  'rounded-xs',
+                  'text-sm',
+                  'min-h-8.5'
+                )}
               />
-              checkbox2
-            </label>
-            <label>
-              <input 
-                type="checkbox" 
-                name='checkbox3'
-                value="checkbox3"
-                defaultChecked={true}
+              <div>Phone:</div>
+              <input
+                name="phone"
+                defaultValue=''
                 required
+                className={cn(
+                  'p-1',
+                  'border',
+                  'rounded-xs',
+                  'text-sm',
+                  'min-h-8.5'
+                )}
               />
-              checkbox3
-            </label>  
-            <button onClick={goNext}>next</button>      
+            </div>
+            <div className={cn(
+              'mt-5',
+            )}>
+              <label>
+                <input 
+                  type="checkbox" 
+                  name='checkbox'
+                  value="checkbox1"
+                  defaultChecked={true}
+                  required
+                />
+                checkbox1
+              </label>
+              <label>
+                <input 
+                  type="checkbox" 
+                  name='checkbox2'
+                  value="checkbox2"
+                  defaultChecked={false}
+                  required
+                />
+                checkbox2
+              </label>
+              <label>
+                <input 
+                  type="checkbox" 
+                  name='checkbox3'
+                  value="checkbox3"
+                  defaultChecked={true}
+                  required
+                />
+                checkbox3
+              </label>  
+            </div>
+            <div className={cn(
+              'mt-7.5',
+              'flex',
+              'items-center',
+            )}>
+              <button 
+                onClick={goNext}
+                className={cn(
+                  'p-2.5',
+                  'bg-blue-600',
+                  'text-white',
+                  'flex',
+                  'items-center',
+                  'justify-center',
+                  'rounded-md',
+                  'cursor-pointer',
+                  'min-w-50',
+                )}
+              >
+                next
+              </button>      
+            </div>
           </div>
           <div
             data-step="2"
@@ -177,7 +204,12 @@ function RouteComponent() {
               'gap-2.5'
             )}
           >
-            <div>
+            <div className={cn(
+              'flex',
+              'flex-col',
+              'gap-2.5',
+              '',
+            )}>
               <label htmlFor={textareaId}>Content</label>
               <textarea 
                 name="postContent" 
@@ -189,7 +221,9 @@ function RouteComponent() {
                 )}
               />
             </div>
-            <div>
+            <div className={cn(
+              'mt-8',
+            )}>
               <label>
                 選擇一個水果:
                 <select 
@@ -203,8 +237,45 @@ function RouteComponent() {
                 </select>
               </label>
             </div>
-            <button onClick={goPrev}>prev</button>
-            <button onClick={goNext}>next</button>
+            <div className={cn(
+              'mt-7.5',
+              'flex',
+              'items-center',
+              'gap-2.5',
+            )}>
+              <button 
+                onClick={goPrev}
+                className={cn(
+                  'p-2.5',
+                  'bg-emerald-600',
+                  'text-white',
+                  'flex',
+                  'items-center',
+                  'justify-center',
+                  'rounded-md',
+                  'cursor-pointer',
+                  'min-w-50',
+                )}
+              >
+                prev
+              </button>      
+              <button 
+                onClick={goNext}
+                className={cn(
+                  'p-2.5',
+                  'bg-blue-600',
+                  'text-white',
+                  'flex',
+                  'items-center',
+                  'justify-center',
+                  'rounded-md',
+                  'cursor-pointer',
+                  'min-w-50',
+                )}
+              >
+                next
+              </button>      
+            </div>
           </div>
           <div
             data-step="3"
@@ -216,53 +287,101 @@ function RouteComponent() {
               'gap-2.5'
             )}
           >
-            <label htmlFor='file'>Content</label>
-            <input 
-              type="file" 
-              id='file' 
-              onChange={handleChange}
-              required
-            />
-            {preview && (
-              <div className={cn(
-                'w-80',
-              )}>
-                <img
-                  src={preview}
-                  alt=""
-                  className={cn(
-                    'w-full',
-                    'h-full',
-                    'object-contain',
-                  )}
-                />
-              </div>
-            )}
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="male"
-                defaultChecked
+            <div className={cn(
+              'flex',
+              'gap-3.5'
+            )}>
+              <label htmlFor='file'>File</label>
+              <input 
+                type="file" 
+                id='file' 
+                onChange={handleChange}
                 required
+                className={cn(
+                  'w-fit',
+                )}
               />
-              男
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="gender"
-                value="female"
-              />
-              女
-            </label>
-            <button onClick={goPrev}>prev</button>
-            <button 
-              type="submit"
-              className={cn(
-                'cursor-pointer',
-              )} 
-            >送出</button>
+              {preview && (
+                <div className={cn(
+                  'mt-5',
+                  'w-25',
+                )}>
+                  <img
+                    src={preview}
+                    alt=""
+                    className={cn(
+                      'w-full',
+                      'h-full',
+                      'object-contain',
+                    )}
+                  />
+                </div>
+              )}
+            </div>
+            <div className={cn(
+              'mt-8',
+              'flex',
+              'gap-2.5',
+            )}>
+              <div>Gender</div>
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="male"
+                  defaultChecked
+                  required
+                />
+                男
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="gender"
+                  value="female"
+                />
+                女
+              </label>
+            </div>
+            <div className={cn(
+              'mt-7.5',
+              'flex',
+              'items-center',
+              'gap-2.5',
+            )}>
+              <button 
+                onClick={goPrev}
+                className={cn(
+                  'p-2.5',
+                  'bg-emerald-600',
+                  'text-white',
+                  'flex',
+                  'items-center',
+                  'justify-center',
+                  'rounded-md',
+                  'cursor-pointer',
+                  'min-w-50',
+                )}
+              >
+                prev
+              </button>      
+              <button 
+                type="submit"
+                className={cn(
+                  'p-2.5',
+                  'bg-blue-600',
+                  'text-white',
+                  'flex',
+                  'items-center',
+                  'justify-center',
+                  'rounded-md',
+                  'cursor-pointer',
+                  'min-w-50',
+                )}
+              >
+                submit
+              </button>      
+            </div>
           </div>
         </form>
       </div>
