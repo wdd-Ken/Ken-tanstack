@@ -12,11 +12,178 @@ function RouteComponent() {
   const [step, setStep] = useState(1)
   const textareaId = useId()
   const formRef = useRef<HTMLFormElement>(null)
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  // typescript型別
+  type BaseField = {
+    name?: string
+    content?: string
+    required?: boolean
+  }
+
+  type InputField = BaseField & {
+    type: 'input'
+    defaultValue?: string
+  }
+  type CheckboxField = BaseField & {
+    type: 'checkbox'
+    defaultChecked?: boolean
+  }
+  type TextareaField = BaseField & {
+    type: 'textarea'
+    defaultValue?: string,
+    id?: string
+  }
+  type SelectField = BaseField & {
+    type: 'select'
+    defaultValue?: string,
+    id?: string,
+    options: {
+      text: string
+      value: string
+    }[]
+  }
+  type FileField = BaseField & {
+    type: 'file'
+    id?: string
+  }
+  type RadioField = BaseField & {
+    type: 'radio'
+    options: {
+      content: string
+      value: string
+      defaultChecked?: boolean
+    }[]
+  }
+
+  type Field =
+    | InputField
+    | TextareaField
+    | SelectField
+    | FileField
+    | CheckboxField
+    | RadioField
+
+  type Step = {
+    step: number
+    fields: Field[]
+  }
+
+  // 資料
+  const stepData: Step[] = [
+    {
+      step: 1,
+      fields: [
+        {
+          type: 'input',
+          name: 'name',
+          content: 'Name:',
+          required: true,
+        },
+        {
+          type: 'input',
+          name: 'email',
+          content: 'Email:',
+          required: true,
+        },
+        {
+          type: 'input',
+          name: 'phone',
+          content: 'Phone:',
+          required: true,
+        },
+        {
+          type: 'checkbox',
+          name: 'checkbox1',
+          content: 'checkbox1',
+          defaultChecked: true,
+          required: true,
+        },
+        {
+          type: 'checkbox',
+          name: 'checkbox2',
+          content: 'checkbox2',
+          defaultChecked: true,
+          required: true,
+        },
+        {
+          type: 'checkbox',
+          name: 'checkbox3',
+          content: 'checkbox3',
+          defaultChecked: true,
+          required: true,
+        },
+      ],
+    },
+    {
+      step: 2,
+      fields: [
+        {
+          type: 'textarea',
+          name: 'postContent',
+          content: 'Content',
+          defaultValue: '',
+          required: true,
+          id: '',
+        },
+        {
+          type: 'select',
+          name: 'fruits',
+          content: 'choose a fruit',
+          defaultValue: '香蕉',
+          options: [
+            { value: 'banana', text: 'banana', },
+            { value: 'apple', text: 'apple', },
+            { value: 'orange', text: 'orange', },
+          ],
+          required: true,
+        },
+      ],
+    },
+    {
+      step: 3,
+      fields: [
+        {
+          type: 'file',
+          content: 'File',
+          id: '',
+          required: true,
+        },
+        {
+          type: 'radio',
+          content: 'Gender',
+          name: 'gender',
+          options: [
+            { content: '男', value: 'male', defaultChecked: false },
+            { content: '女', value: 'female' },
+          ],
+          required: true,
+        }
+      ],
+    },
+    {
+      step: 4,
+      fields: [
+        {
+          type: 'input',
+          name: 'name',
+          content: 'Name:',
+          required: true,
+        },
+        {
+          type: 'textarea',
+          name: 'postContent',
+          content: 'demo',
+          defaultValue: '',
+          required: true,
+          id: '',
+        },
+      ],
+    },
+  ]  
 
   const goNext = () => {
-    const currentStep = document.querySelector(
-      `[data-step="${step}"]`
-    )
+    const currentStep = stepRefs.current[step - 1]
 
     const fields = currentStep?.querySelectorAll(
       'input, textarea, select'
@@ -85,303 +252,232 @@ function RouteComponent() {
             'gap-2.5'
           )}
           ref={formRef}
-          >
-          <div 
-            data-step="1"
-            style={{ display: step === 1 ? 'block' : 'none' }}
-            className={cn(
-              'flex',
-              'flex-col',
-              'w-full',
-              'gap-2.5'
-            )}
-          >
-            <div>
-              <div>Name:</div>
-              <input
-                name="name"
-                defaultValue=''
-                required
-                className={cn(
-                  'p-1',
-                  'border',
-                  'rounded-xs',
-                  'text-sm',
-                  'min-h-8.5'
-                )}
-              />
-              <div>Email:</div>
-              <input
-                name="email"
-                defaultValue=''
-                required
-                className={cn(
-                  'p-1',
-                  'border',
-                  'rounded-xs',
-                  'text-sm',
-                  'min-h-8.5'
-                )}
-              />
-              <div>Phone:</div>
-              <input
-                name="phone"
-                defaultValue=''
-                required
-                className={cn(
-                  'p-1',
-                  'border',
-                  'rounded-xs',
-                  'text-sm',
-                  'min-h-8.5'
-                )}
-              />
-            </div>
-            <div className={cn(
-              'mt-5',
-            )}>
-              <label>
-                <input 
-                  type="checkbox" 
-                  name='checkbox'
-                  value="checkbox1"
-                  defaultChecked={true}
-                  required
-                />
-                checkbox1
-              </label>
-              <label>
-                <input 
-                  type="checkbox" 
-                  name='checkbox2'
-                  value="checkbox2"
-                  defaultChecked={false}
-                  required
-                />
-                checkbox2
-              </label>
-              <label>
-                <input 
-                  type="checkbox" 
-                  name='checkbox3'
-                  value="checkbox3"
-                  defaultChecked={true}
-                  required
-                />
-                checkbox3
-              </label>  
-            </div>
-            <div className={cn(
-              'mt-7.5',
-              'flex',
-              'items-center',
-            )}>
-              <button 
-                onClick={goNext}
-                className={cn(
-                  'p-2.5',
-                  'bg-blue-600',
-                  'text-white',
-                  'flex',
-                  'items-center',
-                  'justify-center',
-                  'rounded-md',
-                  'cursor-pointer',
-                  'min-w-50',
-                )}
-              >
-                next
-              </button>      
-            </div>
-          </div>
-          <div
-            data-step="2"
-            style={{ display: step === 2 ? 'block' : 'none' }}
-            className={cn(
-              'flex',
-              'flex-col',
-              'w-full',
-              'gap-2.5'
-            )}
-          >
-            <div className={cn(
-              'flex',
-              'flex-col',
-              'gap-2.5',
-              '',
-            )}>
-              <label htmlFor={textareaId}>Content</label>
-              <textarea 
-                name="postContent" 
-                id={textareaId}
-                defaultValue='default content'
-                required
-                className={cn(
-                  'border',
-                )}
-              />
-            </div>
-            <div className={cn(
-              'mt-8',
-            )}>
-              <label>
-                選擇一個水果:
-                <select 
-                  name="水果" 
-                  required
-                  defaultValue="香蕉"
+        >
+          {
+            stepData?.map((stepf, i) => {
+              return (
+                <div
+                  key={i}
+                  data-step={stepf.step}
+                  ref={el => {
+                    stepRefs.current[i] = el
+                  }}
+                  className={cn(
+                    step === stepf.step ? 'flex' : 'hidden',
+                    'flex-col',
+                    'w-full',
+                    'gap-2.5'
+                  )}
                 >
-                  <option value="蘋果">蘋果</option>
-                  <option value="香蕉">香蕉</option>
-                  <option value="橘子">橘子</option>
-                </select>
-              </label>
-            </div>
-            <div className={cn(
-              'mt-7.5',
-              'flex',
-              'items-center',
-              'gap-2.5',
-            )}>
-              <button 
-                onClick={goPrev}
-                className={cn(
-                  'p-2.5',
-                  'bg-emerald-600',
-                  'text-white',
-                  'flex',
-                  'items-center',
-                  'justify-center',
-                  'rounded-md',
-                  'cursor-pointer',
-                  'min-w-50',
-                )}
-              >
-                prev
-              </button>      
-              <button 
-                onClick={goNext}
-                className={cn(
-                  'p-2.5',
-                  'bg-blue-600',
-                  'text-white',
-                  'flex',
-                  'items-center',
-                  'justify-center',
-                  'rounded-md',
-                  'cursor-pointer',
-                  'min-w-50',
-                )}
-              >
-                next
-              </button>      
-            </div>
-          </div>
-          <div
-            data-step="3"
-            style={{ display: step === 3 ? 'block' : 'none' }}
-            className={cn(
-              'flex',
-              'flex-col',
-              'w-full',
-              'gap-2.5'
-            )}
-          >
-            <div className={cn(
-              'flex',
-              'gap-3.5'
-            )}>
-              <label htmlFor='file'>File</label>
-              <input 
-                type="file" 
-                id='file' 
-                onChange={handleChange}
-                required
-                className={cn(
-                  'w-fit',
-                )}
-              />
-              {preview && (
-                <div className={cn(
-                  'mt-5',
-                  'w-25',
-                )}>
-                  <img
-                    src={preview}
-                    alt=""
-                    className={cn(
-                      'w-full',
-                      'h-full',
-                      'object-contain',
-                    )}
-                  />
+                  {
+                    stepf.fields.map((field, i) => {
+                      switch (field.type) {
+                        case 'input': 
+                          return (
+                            <div key={i}>
+                              <div>{field.content}</div>
+                              <input
+                                name={field.name}
+                                defaultValue={field.defaultValue}
+                                required={field.required}
+                                className={cn(
+                                  'p-1',
+                                  'border',
+                                  'rounded-xs',
+                                  'text-sm',
+                                  'min-h-8.5',
+                                  'w-full'
+                                )}
+                              />
+                            </div>
+                          )
+                        case 'checkbox':
+                          return (
+                            <div key={i}>
+                              <label>
+                                <input 
+                                  type="checkbox" 
+                                  name={field.name}
+                                  defaultChecked={field.defaultChecked}
+                                  required={field.required}
+                                />
+                                {field.content}
+                              </label>
+                            </div>
+                          )
+                        case 'textarea': 
+                          return (
+                            <div 
+                              key={i}
+                              className={cn(
+                                'flex',
+                                'gap-2.5',
+                            )}>
+                              <label htmlFor={textareaId}>{field.content}</label>
+                              <textarea 
+                                name={field.name}
+                                id={field.id}
+                                defaultValue={field.defaultValue}
+                                required={field.required}
+                                className={cn(
+                                  'border',
+                                )}
+                              />
+                            </div>
+                          )
+                        case 'select':
+                          return (
+                            <div
+                              key={i}
+                              >
+                              <label>
+                                選擇一個水果:
+                                <select 
+                                  name={field.name}
+                                  required={field.required}
+                                  defaultValue={field.defaultValue}
+                                >
+                                  {
+                                    field.options?.map((option, i) => {
+                                      return (
+                                        <option key={i} value={option.value}>{option.text}</option>
+                                      )
+                                    })
+                                  }
+                                </select>
+                              </label>
+                            </div>
+                          )
+                        case 'file': 
+                          return (
+                            <div 
+                              key={i}
+                              className={cn(
+                                'flex',
+                                'gap-3.5'
+                            )}>
+                              <label htmlFor='file'>File</label>
+                              <input 
+                                type="file" 
+                                id='file' 
+                                onChange={handleChange}
+                                required
+                                className={cn(
+                                  'w-fit',
+                                )}
+                              />
+                              {preview && (
+                                <div className={cn(
+                                  'mt-5',
+                                  'w-25',
+                                )}>
+                                  <img
+                                    src={preview}
+                                    alt=""
+                                    className={cn(
+                                      'w-full',
+                                      'h-full',
+                                      'object-contain',
+                                    )}
+                                  />
+                                </div>
+                              )}
+                            </div>
+                          )
+                        case 'radio':
+                          return (
+                            <div 
+                              key={i}
+                              className={cn(
+                                'mt-8',
+                                'flex',
+                                'gap-2.5',
+                            )}>
+                              <div>{field.content}</div>
+                              {
+                                field.options?.map((radio, i) => (
+                                  <label
+                                    key={i}
+                                  >
+                                    <input
+                                      type="radio"
+                                      name={field.name}
+                                      value={radio.value}
+                                      defaultChecked={radio.defaultChecked}
+                                      required
+                                    />
+                                    {radio.content}
+                                  </label>
+                                ))
+                              }
+                            </div>
+                          )
+                      }
+                    })
+                  }
                 </div>
+              )
+            })
+          }
+          <div className={cn(
+            'mt-7.5',
+            'flex',
+            'items-center',
+            'gap-2.5',
+          )}>
+            <button 
+              type="button"
+              onClick={goPrev}
+              className={cn(
+                'p-2.5',
+                'bg-gray-500',
+                'text-white',
+                'flex',
+                'items-center',
+                'justify-center',
+                'rounded-md',
+                'cursor-pointer',
+                'min-w-50',
+                step === 1 ? 'hidden' : 'block'
               )}
-            </div>
-            <div className={cn(
-              'mt-8',
-              'flex',
-              'gap-2.5',
-            )}>
-              <div>Gender</div>
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="male"
-                  defaultChecked
-                  required
-                />
-                男
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="gender"
-                  value="female"
-                />
-                女
-              </label>
-            </div>
-            <div className={cn(
-              'mt-7.5',
-              'flex',
-              'items-center',
-              'gap-2.5',
-            )}>
-              <button 
-                onClick={goPrev}
-                className={cn(
-                  'p-2.5',
-                  'bg-emerald-600',
-                  'text-white',
-                  'flex',
-                  'items-center',
-                  'justify-center',
-                  'rounded-md',
-                  'cursor-pointer',
-                  'min-w-50',
-                )}
-              >
-                prev
-              </button>      
-              <button 
-                type="submit"
-                className={cn(
-                  'p-2.5',
-                  'bg-blue-600',
-                  'text-white',
-                  'flex',
-                  'items-center',
-                  'justify-center',
-                  'rounded-md',
-                  'cursor-pointer',
-                  'min-w-50',
-                )}
-              >
-                submit
-              </button>      
-            </div>
+            >
+              Prev
+            </button>      
+            <button 
+              type="button"
+              onClick={goNext}
+              className={cn(
+                'p-2.5',
+                'bg-blue-600',
+                'text-white',
+                'flex',
+                'items-center',
+                'justify-center',
+                'rounded-md',
+                'cursor-pointer',
+                'min-w-50',
+                step === stepData.length ? 'hidden' : 'block'
+              )}
+            >
+              next
+            </button>
+            <button 
+              type="submit"
+              className={cn(
+                'p-2.5',
+                'bg-lime-500',
+                'text-white',
+                'flex',
+                'items-center',
+                'justify-center',
+                'rounded-md',
+                'cursor-pointer',
+                'min-w-50',
+                step === stepData.length ? 'block' : 'hidden'
+              )}
+            >
+              submit
+            </button>        
           </div>
         </form>
       </div>
