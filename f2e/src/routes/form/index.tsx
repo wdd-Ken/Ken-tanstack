@@ -1,9 +1,9 @@
 import { cn } from '#/lib/utils'
 import { createFileRoute } from '@tanstack/react-router'
-import { useId, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useState } from 'react'
-import { motion } from "motion/react"
-import { transition } from '#/animation'
+import { AnimatePresence, motion } from "motion/react"
+import { stepTrans, transition } from '#/animation'
 import StepNavigation from '#/components/button'
 import type { Field } from '#/types'
 import { templateData } from '#/datas'
@@ -12,16 +12,22 @@ export const Route = createFileRoute('/form/')({
   component: RouteComponent,
 })
 
+type FormValue = string | boolean | File | null
+
 function RouteComponent() {
-  const [preview, setPreview] = useState('')
+  // const [preview, setPreview] = useState('')
   const [step, setStep] = useState(1)
-  const [savedData, setSavedData] = useState<Record<string, string>>({})
+  const [savedData, setSavedData] = useState<Record<string, FormValue>>({})
   const [savedFile, setSavedFile] = useState<File | null>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const stepRef = useRef<HTMLDivElement>(null)
-  const textareaId = useId()
 
   const currentStepData = templateData[step - 1]
+
+  useEffect(() => {
+    console.log('savedData',savedData);
+    
+  }, [savedData])
 
   const saveCurrentStep = () => {
     const form = formRef.current
@@ -29,14 +35,22 @@ function RouteComponent() {
 
     const formData = new FormData(form)
 
-    const currentData: Record<string, string> = {}
+    const currentData: Record<string, FormValue> = {}
 
     for (const [key, value] of formData.entries()) {
       if (typeof value === 'string') {
         currentData[key] = value
       }
     }
-    // console.log('currentData',currentData);
+
+    const checkboxes = form.querySelectorAll<HTMLInputElement>(
+      'input[type="checkbox"]'
+    )
+
+    checkboxes.forEach((el) => {
+      if (!el.name) return
+      currentData[el.name] = el.checked
+    })
     
     setSavedData(prev => ({
       ...prev,
@@ -44,13 +58,7 @@ function RouteComponent() {
     }))
   }
 
-  const renderField = (field: Field, id: number) => {
-    console.log({
-      step,
-      fieldName: field.name,
-      defaultValue: savedData[field.name!],
-      savedData,
-    })
+  const renderField = (field: Field, id: string | undefined) => {
     switch (field.type) {
       case 'input': 
         return (
@@ -67,7 +75,9 @@ function RouteComponent() {
             <input
               name={field.name}
               defaultValue={
-                savedData[field.name!] ?? field.defaultValue
+                typeof savedData[field.name!] === 'string'
+                  ? savedData[field.name!] as string
+                  : field.defaultValue
               }
               required={field.required}
               className={cn(
@@ -81,128 +91,145 @@ function RouteComponent() {
             />
           </div>
         )
-      // case 'checkbox':
-      //   return (
-      //     <div key={id}>
-      //       <label>
-      //         <input 
-      //           type="checkbox" 
-      //           name={field.name}
-      //           defaultChecked={field.defaultChecked}
-      //           required={field.required}
-      //         />
-      //         {field.content}
-      //       </label>
-      //     </div>
-      //   )
-      // case 'textarea': 
-      //   return (
-      //     <div 
-      //       key={id}
-      //       className={cn(
-      //         'flex',
-      //         'gap-2.5',
-      //     )}>
-      //       <label htmlFor={textareaId}>{field.content}</label>
-      //       <textarea 
-      //         name={field.name}
-      //         id={field.id}
-      //         defaultValue={field.defaultValue}
-      //         required={field.required}
-      //         className={cn(
-      //           'border',
-      //         )}
-      //       />
-      //     </div>
-      //   )
-      // case 'select':
-      //   return (
-      //     <div
-      //       key={id}
-      //       >
-      //       <label>
-      //         選擇一個水果:
-      //         <select 
-      //           name={field.name}
-      //           required={field.required}
-      //           defaultValue={field.defaultValue}
-      //         >
-      //           {
-      //             field.options?.map((option, i) => {
-      //               return (
-      //                 <option key={i} value={option.value}>{option.text}</option>
-      //               )
-      //             })
-      //           }
-      //         </select>
-      //       </label>
-      //     </div>
-      //   )
-      // case 'file': 
-      //   return (
-      //     <div 
-      //       key={id}
-      //       className={cn(
-      //         'flex',
-      //         'gap-3.5'
-      //     )}>
-      //       <label htmlFor='file'>File</label>
-      //       <input 
-      //         type="file" 
-      //         id='file' 
-      //         onChange={handleChange}
-      //         required
-      //         className={cn(
-      //           'w-fit',
-      //         )}
-      //       />
-      //       {preview && (
-      //         <div className={cn(
-      //           'mt-5',
-      //           'w-25',
-      //         )}>
-      //           <img
-      //             src={preview}
-      //             alt=""
-      //             className={cn(
-      //               'w-full',
-      //               'h-full',
-      //               'object-contain',
-      //             )}
-      //           />
-      //         </div>
-      //       )}
-      //     </div>
-      //   )
-      // case 'radio':
-      //   return (
-      //     <div 
-      //       key={id}
-      //       className={cn(
-      //         'mt-8',
-      //         'flex',
-      //         'gap-2.5',
-      //     )}>
-      //       <div>{field.content}</div>
-      //       {
-      //         field.options?.map((radio, i) => (
-      //           <label
-      //             key={i}
-      //           >
-      //             <input
-      //               type="radio"
-      //               name={field.name}
-      //               value={radio.value}
-      //               defaultChecked={radio.defaultChecked}
-      //               required
-      //             />
-      //             {radio.content}
-      //           </label>
-      //         ))
-      //       }
-      //     </div>
-      //   )
-    }
+      case 'checkbox':
+        return (
+          <div key={id}>
+            <label>
+              <input 
+                type="checkbox" 
+                name={field.name}
+                defaultChecked={
+                  typeof savedData[field.name!] === 'boolean'
+                    ? savedData[field.name!] as boolean
+                    : field.defaultChecked
+                }
+                required={field.required}
+              />
+              {field.content}
+            </label>
+          </div>
+        )
+      case 'textarea': 
+        return (
+          <div 
+            key={id}
+            className={cn(
+              'flex',
+              'gap-2.5',
+          )}>
+            <label>{field.content}
+              <textarea 
+                name={field.name}
+                id={field.id}
+                defaultValue={
+                  typeof savedData[field.name!] === 'string'
+                    ? savedData[field.name!] as string
+                    : field.defaultValue
+                }
+                required={field.required}
+                className={cn(
+                  'border',
+                )}
+              />
+            </label>
+          </div>
+        )
+      case 'select':
+        return (
+          <div
+            key={id}
+            >
+            <label>
+              選擇一個水果:
+              <select 
+                name={field.name}
+                required={field.required}
+                defaultValue={
+                  typeof savedData[field.name!] === 'string'
+                    ? savedData[field.name!] as string
+                    : field.defaultValue
+                }
+              >
+                {
+                  field.options?.map((option, i) => {
+                    return (
+                      <option key={i} value={option.value}>{option.text}</option>
+                    )
+                  })
+                }
+              </select>
+            </label>
+          </div>
+        )
+        case 'radio':
+          return (
+            <div 
+            key={id}
+            className={cn(
+              'mt-8',
+              'flex',
+              'gap-2.5',
+            )}>
+            <div>{field.content}</div>
+            {
+              field.options?.map((radio, i) => (
+                <label
+                key={i}
+                >
+                  <input
+                    type="radio"
+                    name={field.name}
+                    value={radio.value}
+                    defaultChecked={
+                      savedData[field.name!] === radio.value
+                        ? true
+                        : radio.defaultChecked
+                    }
+                    required
+                    />
+                  {radio.content}
+                </label>
+              ))
+        // case 'file': 
+        //   return (
+        //     <div 
+        //       key={id}
+        //       className={cn(
+        //         'flex',
+        //         'gap-3.5'
+        //     )}>
+        //       <label htmlFor='file'>File</label>
+        //       <input 
+        //         type="file" 
+        //         id='file' 
+        //         onChange={handleChange}
+        //         required
+        //         className={cn(
+        //           'w-fit',
+        //         )}
+        //       />
+        //       {preview && (
+        //         <div className={cn(
+        //           'mt-5',
+        //           'w-25',
+        //         )}>
+        //           <img
+        //             src={preview}
+        //             alt=""
+        //             className={cn(
+        //               'w-full',
+        //               'h-full',
+        //               'object-contain',
+        //             )}
+        //           />
+        //         </div>
+        //       )}
+        //     </div>
+        //   )
+            }
+          </div>
+        )
+      }
   }
 
   const goNext = () => {
@@ -237,25 +264,22 @@ function RouteComponent() {
     setStep(prev => prev - 1)
   }
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = e.target.files?.[0]
+  // const handleChange = (
+  //   e: React.ChangeEvent<HTMLInputElement>
+  // ) => {
+  //   const file = e.target.files?.[0]
 
-    if (!file) return
-    console.log(file)
-    setPreview(URL.createObjectURL(file))
-  }
+  //   if (!file) return
+  //   console.log(file)
+  //   setPreview(URL.createObjectURL(file))
+  // }
 
-  const handleSubmit = (e: {
-    target: HTMLFormElement | undefined ; 
-    preventDefault: () => void 
-  }) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    const formData = new FormData(e.target)
-    const formJson = Object.fromEntries(formData.entries())
-    console.log(formJson)
+    saveCurrentStep()
+
+    console.log(formRef.current)
   }
 
   return (
@@ -306,8 +330,25 @@ function RouteComponent() {
               'w-full',
               'gap-2.5'
             )}
-          >
-            {currentStepData.fields.map((field, id) => renderField(field, id))}
+          > 
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 50 }}
+                transition={stepTrans}
+                className={cn(
+                  'flex',
+                  'flex-col',
+                  'flex-1',
+                  'w-full',
+                  'gap-2.5',
+                )}
+              >
+                {currentStepData.fields.map(field => renderField(field, field.id))}
+              </motion.div>
+            </AnimatePresence>
           </div>
           <div className={cn(
             'flex',

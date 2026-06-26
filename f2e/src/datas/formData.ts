@@ -33,15 +33,15 @@ export const templateData: Step[] = [
       {
         id: '4',
         type: 'input',
-        name: 'emailfff',
-        content: 'Email:',
+        name: 'location',
+        content: 'Location:',
         required: true,
       },
       {
         id: '5',
         type: 'input',
-        name: 'phonefff',
-        content: 'Phone:',
+        name: 'company',
+        content: 'Company:',
         required: true,
       },
     ]

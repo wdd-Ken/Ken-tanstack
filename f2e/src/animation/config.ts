@@ -5,6 +5,11 @@ export const transition = {
   ease: [0.66, 0, 0.34, 1] as const,
 }
 
+export const stepTrans = {
+  duration: 0.5,
+  ease: [0.66, 0, 0.34, 1] as const,
+}
+
 export const statusSwitch = {
   hidden: {
     opacity: 0
