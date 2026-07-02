@@ -11,8 +11,17 @@ type InputField = BaseField & {
 }
 
 type CheckboxField = BaseField & {
-  type: 'checkbox'
+  type: 'checkbox-group'
   defaultChecked?: boolean
+  options: {
+    id: string
+    name: string
+    content: string
+    checkedValue: string
+    uncheckedValue: string
+    defaultChecked: boolean
+    required?: boolean
+  }[]
 }
 
 type TextareaField = BaseField & {

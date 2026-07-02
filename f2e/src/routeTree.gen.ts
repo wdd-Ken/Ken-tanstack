@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TodolistIndexRouteImport } from './routes/todolist/index'
+import { Route as FormNewIndexRouteImport } from './routes/formNew/index'
 import { Route as FormIndexRouteImport } from './routes/form/index'
 
 const AboutRoute = AboutRouteImport.update({
@@ -29,6 +30,11 @@ const TodolistIndexRoute = TodolistIndexRouteImport.update({
   path: '/todolist/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FormNewIndexRoute = FormNewIndexRouteImport.update({
+  id: '/formNew/',
+  path: '/formNew/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FormIndexRoute = FormIndexRouteImport.update({
   id: '/form/',
   path: '/form/',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/form/': typeof FormIndexRoute
+  '/formNew/': typeof FormNewIndexRoute
   '/todolist/': typeof TodolistIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/form': typeof FormIndexRoute
+  '/formNew': typeof FormNewIndexRoute
   '/todolist': typeof TodolistIndexRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/form/': typeof FormIndexRoute
+  '/formNew/': typeof FormNewIndexRoute
   '/todolist/': typeof TodolistIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/form/' | '/todolist/'
+  fullPaths: '/' | '/about' | '/form/' | '/formNew/' | '/todolist/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/form' | '/todolist'
-  id: '__root__' | '/' | '/about' | '/form/' | '/todolist/'
+  to: '/' | '/about' | '/form' | '/formNew' | '/todolist'
+  id: '__root__' | '/' | '/about' | '/form/' | '/formNew/' | '/todolist/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   FormIndexRoute: typeof FormIndexRoute
+  FormNewIndexRoute: typeof FormNewIndexRoute
   TodolistIndexRoute: typeof TodolistIndexRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TodolistIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/formNew/': {
+      id: '/formNew/'
+      path: '/formNew'
+      fullPath: '/formNew/'
+      preLoaderRoute: typeof FormNewIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/form/': {
       id: '/form/'
       path: '/form'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   FormIndexRoute: FormIndexRoute,
+  FormNewIndexRoute: FormNewIndexRoute,
   TodolistIndexRoute: TodolistIndexRoute,
 }
 export const routeTree = rootRouteImport

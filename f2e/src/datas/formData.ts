@@ -5,25 +5,57 @@ export const templateData: Step[] = [
     step: 1,
     fields: [
       {
-        id: '1',
+        id: 'input1',
         type: 'input',
         name: 'name',
         content: 'Name:',
         required: true,
       },
       {
-        id: '2',
+        id: 'input2',
         type: 'input',
         name: 'email',
         content: 'Email:',
         required: true,
       },
       {
-        id: '3',
+        id: 'input3',
         type: 'input',
         name: 'phone',
         content: 'Phone:',
         required: true,
+      },
+      {
+        id: 'text1',
+        type: 'textarea',
+        name: 'text',
+        content: 'Content:',
+        defaultValue: '',
+        required: true,
+      },
+      {
+        type: 'checkbox-group', // form欄位種類判斷
+        id: 'servicesId', // checkbox group id 
+        content: 'Services:', // UI名稱
+        name: 'services',  // 資料欄位
+        options: [
+          {
+            id: 'design', 
+            name: 'checkbox1Key',
+            content: 'Design',
+            checkedValue: 'Y',
+            uncheckedValue: 'N',
+            defaultChecked: false,
+          },
+          {
+            id: 'frontend',
+            name: 'checkbox2Key',
+            content: 'Frontend',
+            checkedValue: '1',
+            uncheckedValue: '0',
+            defaultChecked: false,
+          },
+        ]
       },
     ]
   },
@@ -31,17 +63,38 @@ export const templateData: Step[] = [
     step: 2,
     fields: [
       {
-        id: '4',
-        type: 'input',
-        name: 'location',
-        content: 'Location:',
+        id: 'select1',
+        type: 'select',
+        name: 'fruits',
+        content: 'choose a fruit',
+        defaultValue: '香蕉',
+        options: [
+          { value: 'banana', text: 'banana', },
+          { value: 'apple', text: 'apple', },
+          { value: 'orange', text: 'orange', },
+        ],
         required: true,
       },
       {
-        id: '5',
-        type: 'input',
-        name: 'company',
-        content: 'Company:',
+        id: 'radio1',
+        type: 'radio',
+        content: 'Gender',
+        name: 'gender',
+        options: [
+          { content: '男', value: 'male', defaultChecked: false },
+          { content: '女', value: 'female' },
+        ],
+      },
+    ]
+  },
+  {
+    step: 3,
+    fields: [
+      {
+        type: 'file',
+        content: 'File',
+        name: 'uploadFile',
+        id: '',
         required: true,
       },
     ]

@@ -161,9 +161,9 @@ function RouteComponent() {
             </label>
           </div>
         )
-        case 'radio':
-          return (
-            <div 
+      case 'radio':
+        return (
+          <div 
             key={id}
             className={cn(
               'mt-8',
@@ -190,46 +190,45 @@ function RouteComponent() {
                   {radio.content}
                 </label>
               ))
-        // case 'file': 
-        //   return (
-        //     <div 
-        //       key={id}
-        //       className={cn(
-        //         'flex',
-        //         'gap-3.5'
-        //     )}>
-        //       <label htmlFor='file'>File</label>
-        //       <input 
-        //         type="file" 
-        //         id='file' 
-        //         onChange={handleChange}
-        //         required
-        //         className={cn(
-        //           'w-fit',
-        //         )}
-        //       />
-        //       {preview && (
-        //         <div className={cn(
-        //           'mt-5',
-        //           'w-25',
-        //         )}>
-        //           <img
-        //             src={preview}
-        //             alt=""
-        //             className={cn(
-        //               'w-full',
-        //               'h-full',
-        //               'object-contain',
-        //             )}
-        //           />
-        //         </div>
-        //       )}
-        //     </div>
-        //   )
             }
           </div>
         )
-      }
+      case 'file': 
+        return (
+          <div 
+            key={id}
+            className={cn(
+              'flex',
+              'gap-3.5'
+          )}>
+            <label htmlFor='file'>File</label>
+            <input 
+              type="file" 
+              id='file' 
+              onChange={handleChange}
+              required
+              className={cn(
+                  'w-fit',
+                )}
+              />
+              {preview && (
+                <div className={cn(
+                  'mt-5',
+                  'w-25',
+                )}>
+                  <img
+                    src={preview}
+                    alt=""
+                    className={cn(
+                      'w-full',
+                      'h-full',
+                      'object-contain',
+                    )}/>
+                </div>
+              )}
+          </div>
+        )
+    }
   }
 
   const goNext = () => {
