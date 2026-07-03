@@ -35,13 +35,13 @@ export const templateData: Step[] = [
       },
       {
         type: 'checkbox-group', // form欄位種類判斷
-        id: 'servicesId', // checkbox group id 
-        content: 'Services:', // UI名稱
-        name: 'services',  // 資料欄位
+        id: 'hobbyId', // checkbox group id 
+        content: 'Hobbies:', // UI名稱
+        name: 'hobbies',  // 資料欄位
         options: [
           {
             id: 'design', 
-            name: 'checkbox1Key',
+            name: 'design',
             content: 'Design',
             checkedValue: 'Y',
             uncheckedValue: 'N',
@@ -49,7 +49,7 @@ export const templateData: Step[] = [
           },
           {
             id: 'frontend',
-            name: 'checkbox2Key',
+            name: 'frontend',
             content: 'Frontend',
             checkedValue: '1',
             uncheckedValue: '0',
@@ -66,7 +66,7 @@ export const templateData: Step[] = [
         id: 'select1',
         type: 'select',
         name: 'fruits',
-        content: 'choose a fruit',
+        content: 'Choose a fruit',
         defaultValue: '香蕉',
         options: [
           { value: 'banana', text: 'banana', },

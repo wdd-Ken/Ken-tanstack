@@ -17,7 +17,6 @@ function RouteComponent() {
   const [result, setResult] = useState<any>(null)
   const [isSubmit, setIsSubmit] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
-  const [files, setFiles] = useState<File[]>([])
   const stepRef = useRef<HTMLDivElement>(null)
 
   const currentStepData = templateData[step - 1]
@@ -156,19 +155,6 @@ function RouteComponent() {
     setIsDragging(false)
   }
 
-  // const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-  //   e.stopPropagation()
-  //   e.preventDefault()
-
-  //   const droppedFiles = Array.from(e.dataTransfer.files)
-  //   setFiles(prev => [...prev, ...droppedFiles])
-  //   setIsDragging(false)
-  // }
-
-  // useEffect(() => {
-  //   console.log('files',files);
-  // }, [files])
-
   const renderField = (field: any) => {
     switch (field.type) {
       case 'input':
@@ -222,6 +208,7 @@ function RouteComponent() {
                 required={field.required}
                 className={cn(
                   'border',
+                  'w-full',
                 )}
                 onChange={handleChange}
               />
@@ -338,11 +325,10 @@ function RouteComponent() {
               'w-full',
               'h-100',
             )}>
-            <div>upload file</div>
+            <div>Upload file</div>
             <div
               onDragEnter={handleDragEnter}
               onDragLeave={handleDragLeave}
-              // onDragOver={(e) => e.preventDefault()}
               className={cn(
                 'relative',
                 'flex',
@@ -386,24 +372,6 @@ function RouteComponent() {
                 </div>
               )}
             </div>
-            {/* <div
-              onDragEnter={handleDragEnter}
-              onDragLeave={handleDragLeave}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={handleDrop}
-              className={cn(
-                'flex',
-                'items-center',
-                'justify-center',
-                'w-full',
-                'h-100',
-                'border-2',
-                'rounded-2xl',
-                isDragging ? "border-blue-500 bg-blue-50" : 'border-black-500',
-              )}
-            >
-              fileUpload
-            </div> */}
           </div>
         )
     }
@@ -507,12 +475,20 @@ function RouteComponent() {
             'justify-center',
             'gap-2.5',
           )}>
-            <StepNavigation
-              currentStep={step}
-              totalSteps={templateData.length}
-              onPrev={goPrev}
-              onNext={goNext}
-            />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+              >
+                <StepNavigation
+                  currentStep={step}
+                  totalSteps={templateData.length}
+                  onPrev={goPrev}
+                  onNext={goNext}
+                  />
+              </motion.div>
+            </AnimatePresence>
           </div>
         </form>
         }
